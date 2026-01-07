@@ -21,7 +21,7 @@ public class ProcessOrderFunction
 
     [Function(nameof(ProcessOrderFunction))]
     public async Task Run(
-        [ServiceBusTrigger("compras-realizadas", Connection = "SERVICEBUS_CONNECTION")]
+        [ServiceBusTrigger("order-created", Connection = "SERVICEBUS_CONNECTION")]
         string message,
         FunctionContext context,
         CancellationToken ct)
