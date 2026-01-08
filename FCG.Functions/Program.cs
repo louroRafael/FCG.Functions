@@ -1,3 +1,4 @@
+using FCG.Functions.Helpers;
 using FCG.Functions.Interfaces;
 using FCG.Functions.Options;
 using FCG.Functions.Services;
@@ -16,6 +17,8 @@ var host = new HostBuilder()
     .ConfigureServices((context, services) =>
     {
         services.Configure<ApiOptions>(context.Configuration.GetSection("FunctionOptions"));
+
+        services.AddScoped(typeof(IAppLogger<>), typeof(AppLogger<>));
 
         services.AddHttpClient<IPaymentClient, PaymentClient>((sp, http) =>
         {
