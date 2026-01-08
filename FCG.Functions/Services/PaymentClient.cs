@@ -17,7 +17,7 @@ public class PaymentClient : IPaymentClient
 
     public async Task<Result<PaymentResponse>> CreatePaymentAsync(CreatePaymentRequest request, CancellationToken ct)
     {
-        using var response = await _httpClient.PostAsJsonAsync("api/payments", request, ct);
+        using var response = await _httpClient.PostAsJsonAsync("api/Payments/internal", request, ct);
 
         if (!response.IsSuccessStatusCode)
         {
