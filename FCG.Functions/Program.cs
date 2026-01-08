@@ -19,6 +19,7 @@ var host = new HostBuilder()
         services.Configure<ApiOptions>(context.Configuration.GetSection("FunctionOptions"));
 
         services.AddScoped(typeof(IAppLogger<>), typeof(AppLogger<>));
+        services.AddScoped<ICorrelationIdGenerator, CorrelationIdGenerator>();
 
         services.AddHttpClient<IPaymentClient, PaymentClient>((sp, http) =>
         {
