@@ -27,6 +27,9 @@ var host = new HostBuilder()
             if(string.IsNullOrWhiteSpace(opt.ApimSubscriptionKey))
                 throw new InvalidOperationException("Configurações API: APIM Subscription Key não configurado.");
 
+            Console.WriteLine($"BaseUrl carregada: {opt.BaseUrl}");
+            Console.WriteLine($"APIM Subscription Key carregada: {opt.ApimSubscriptionKey}");
+
             http.BaseAddress = new Uri(opt.BaseUrl.TrimEnd('/') + "/");
             http.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", opt.ApimSubscriptionKey);
             http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
