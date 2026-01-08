@@ -33,18 +33,44 @@ public class ProcessOrderFunction
             newOrder = JsonSerializer.Deserialize<Order>(
                 message,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-            ) ?? throw new InvalidOperationException("Erro ao serializar pedido");
-
-            var request = new CreatePaymentRequest(newOrder.OrderId, newOrder.TotalAmount, newOrder.PaymentMethod);
-
-            var paymentResponse = await _paymentClient.CreatePaymentAsync(request, ct);
-
-            if (!paymentResponse.Success)
-                throw new InvalidOperationException("Erro ao criar pagamento");
+            ) ?? throw new InvalidOperationException("Erro ao desserializar pedido");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Falha ao criar pagamento");
+            _logger.LogError(ex, "Mensagem inválida recebida. Payload: {Message}", message);
+            return;
+        }
+
+        try
+        {
+            var request = new CreatePaymentRequest(newOrder.OrderId, newOrder.TotalAmount, newOrder.PaymentMethod);
+
+            var result = await _paymentClient.CreatePaymentAsync(request, ct);
+
+            if (!result.Success)
+            {
+                _logger.LogWarning(
+                    "Falha ao criar pagamento. OrderId={OrderId}. Erros={Errors}",
+                    newOrder.OrderId,
+                    result.Errors
+                );
+
+                return;
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError(ex, "Erro de comunicação com Payments API");
+            throw;
+        }
+        catch (TaskCanceledException ex)
+        {
+            _logger.LogError(ex, "Timeout ao chamar Payments API");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro inesperado ao processar pagamento");
             throw;
         }
     }
