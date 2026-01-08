@@ -24,7 +24,11 @@ var host = new HostBuilder()
             if (string.IsNullOrWhiteSpace(opt.BaseUrl))
                 throw new InvalidOperationException("Configurações API: BaseUrl não configurado.");
 
+            if(string.IsNullOrWhiteSpace(opt.ApimSubscriptionKey))
+                throw new InvalidOperationException("Configurações API: APIM Subscription Key não configurado.");
+
             http.BaseAddress = new Uri(opt.BaseUrl.TrimEnd('/') + "/");
+            http.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", opt.ApimSubscriptionKey);
             http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         });
     })
