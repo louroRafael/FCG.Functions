@@ -4,7 +4,7 @@
 
 ## 🚀 Tech Challenge – FIAP (Fase 3)
 
-Este projeto integra o Tech Challenge da FIAP
+Este projeto integra o FIAP Cloud Game apresentado como Tech Challenge do curso de pós-graduação em Arquitetura de Sistemas .NET
 
 ## 🧩 Visão Geral da Solução
 
